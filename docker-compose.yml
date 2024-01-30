@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  kinorent:
+    build: .
+    container_name: kinorent_bot
+    command: python main.py
+    ports:
+      - 80:80
+    volumes:
+      - ./:/app
+
+
