@@ -65,7 +65,7 @@ async def get_packages(callback: CallbackQuery):
 
     photo_path = send_photo_with_caption_and_markup(config.settings['USER_PATH'], config.settings['PROJECT_PATH'],
                                                     "jpeg",
-                                                    package_to_compare, )
+                                                    package_to_compare)
 
     await callback.message.answer_photo(photo=photo_path, caption=handle_data.package_data[f'{package_to_compare}'],
                                         reply_markup=keyboards.action_menu)
