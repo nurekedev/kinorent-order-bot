@@ -28,6 +28,7 @@ package_menu_buttons = [
     [InlineKeyboardButton(text="🎨 Базовый набор (6 000₸)", callback_data=f'package_basic')],
     [InlineKeyboardButton(text="🎬 Базовый + Экран за (9 000₸)", callback_data=f'package_medium')],
     [InlineKeyboardButton(text="🌟 Полный пакет (12 000₸)", callback_data=f'package_vip')],
+    [InlineKeyboardButton(text="🚘 Кинотеатр в машине (6 000₸)", callback_data=f'package_car')],
     [InlineKeyboardButton(text='🔙 Назад', callback_data=f"back_to_{BackPath.TO_MAIN.value}")]
 ]
 
@@ -39,6 +40,7 @@ goals = [
     "📊 Презентация",
     "🎉 Мероприятие",
     "📝 В других целях"
+    "🚘 Просмотра в автомобиле"
 ]
 
 goals_kb_buttons = [
