@@ -15,7 +15,8 @@ class BackPath(Enum):
 
 main_menu_buttons = [
     [KeyboardButton(text='🍿 Арендовать проектор')],
-    [KeyboardButton(text='☎️ Заказать звонок')],
+    [KeyboardButton(text='☎️ Заказать звонок'), 
+     KeyboardButton(text='🙋🏽 Задать вопрос')],
     [KeyboardButton(text='🛠 Инструкция сборки'),
      KeyboardButton(text='🪩 Cоциальные сети')]
 ]
@@ -39,7 +40,7 @@ goals = [
     "🎬 Для киновечера",
     "📊 Презентация",
     "🎉 Мероприятие",
-    "📝 В других целях"
+    "📝 В других целях",
     "🚘 Просмотра в автомобиле"
 ]
 
@@ -87,3 +88,10 @@ instruction_list = [
 ]
 
 instruction_menu = InlineKeyboardMarkup(inline_keyboard=instruction_list)
+
+back_from_question = [
+    [KeyboardButton(text='🏁 Перейти в меню', callback_data=f"back_to_{BackPath.TO_MAIN.value}")]
+]
+
+back_question_menu = ReplyKeyboardMarkup(keyboard=back_from_question, resize_keyboard=True)
+

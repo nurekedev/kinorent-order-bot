@@ -6,3 +6,7 @@ class OrderForm(StatesGroup):
     phone_number = State()
     date = State()
     address = State()
+
+
+class QuestionForm(StatesGroup):
+    question_text = State()
