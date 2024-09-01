@@ -15,8 +15,7 @@ class BackPath(Enum):
 
 main_menu_buttons = [
     [KeyboardButton(text='🍿 Арендовать проектор')],
-    [KeyboardButton(text='☎️ Заказать звонок'), 
-     KeyboardButton(text='🙋🏽 Задать вопрос')],
+    [KeyboardButton(text='☎️ Заказать звонок')],
     [KeyboardButton(text='🛠 Инструкция сборки'),
      KeyboardButton(text='🪩 Cоциальные сети')]
 ]
@@ -26,10 +25,11 @@ main_menu = ReplyKeyboardMarkup(keyboard=main_menu_buttons,
                                 input_field_placeholder='Выберите пункт ниже 👇🏽')
 
 package_menu_buttons = [
-    [InlineKeyboardButton(text="🎨 Базовый набор (6 000₸)", callback_data=f'package_basic')],
-    [InlineKeyboardButton(text="🎬 Базовый + Экран за (9 000₸)", callback_data=f'package_medium')],
-    [InlineKeyboardButton(text="🌟 Полный пакет (12 000₸)", callback_data=f'package_vip')],
-    [InlineKeyboardButton(text="🚘 Кинотеатр в машине (6 000₸)", callback_data=f'package_car')],
+    [InlineKeyboardButton(text="🎨 Базовый набор (7 000₸)", callback_data=f'package_basic')],
+    [InlineKeyboardButton(text="🎬 Базовый + Экран за (12 000₸)", callback_data=f'package_medium')],
+    [InlineKeyboardButton(text="🌟 Полный пакет (15 000₸)", callback_data=f'package_vip')],
+    [InlineKeyboardButton(text="🎮 Полный набор + PS5 (19 000₸)", callback_data=f'package_ps')],
+    [InlineKeyboardButton(text="🚘 Кинотеатр в машине (7 000₸)", callback_data=f'package_car')],
     [InlineKeyboardButton(text='🔙 Назад', callback_data=f"back_to_{BackPath.TO_MAIN.value}")]
 ]
 
@@ -89,9 +89,9 @@ instruction_list = [
 
 instruction_menu = InlineKeyboardMarkup(inline_keyboard=instruction_list)
 
-back_from_question = [
-    [KeyboardButton(text='🏁 Перейти в меню', callback_data=f"back_to_{BackPath.TO_MAIN.value}")]
+back_from_instruction_photo = [
+    [InlineKeyboardButton(text='🔙 Назад', callback_data='back_to_')]
 ]
 
-back_question_menu = ReplyKeyboardMarkup(keyboard=back_from_question, resize_keyboard=True)
+back_instruction_menu = InlineKeyboardMarkup(inline_keyboard=back_from_instruction_photo)
 

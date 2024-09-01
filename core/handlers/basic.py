@@ -5,7 +5,8 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.types import ReplyKeyboardRemove, FSInputFile
 from typing import Any, Dict
 from functools import lru_cache
-from openai import AsyncOpenAI
+
+
 
 
 import core.keyboards.buttons as keyboards
@@ -13,40 +14,18 @@ import core.forms as forms
 import core.handlers.handle_data as handle_data
 
 import os
-import re
 import config
 import uuid
-import asyncio
 
 
 router = Router(name="Main Router")
 package_to_compare = "не выбран"
 
-client = AsyncOpenAI(
-    api_key=config.settings['OPENAI_TOKEN']
-)
-
-
-async def answer_using_gpt(user_question):
-    chat_completion = await client.chat.completions.create(
-        messages=[
-            {
-                "role": "system",
-                "content": handle_data.initial_text,
-            },
-            {
-                "role": "user",
-                "content": f"{user_question}",
-            }
-        ],
-        model="gpt-3.5-turbo",
-    )
-
-    return chat_completion.choices[0].message.content
 
 
 @lru_cache(maxsize=100)
 def send_photo_with_caption_and_markup(path, project_path, file_extension, filename):
+    print(os.path.join(path, project_path, f"{filename}.{file_extension}"))
     return FSInputFile(os.path.join(path, project_path, f"{filename}.{file_extension}"))
 
 
@@ -68,27 +47,32 @@ async def share_phone_number(message: Message):
     await message.answer("🇰🇿 Нажмите на кнопку ниже для заказа звонка"
                          "\n🇷🇺 Қоңырау тапсырыс беру үшін батырманы бас", reply_markup=keyboards.request_call_menu)
     
-
-
-@router.message(F.text == '🙋🏽 Задать вопрос')
-async def ask_question(message: Message, state: FSMContext):
-    await message.answer("Привет, я виртуальный консультант компании Kinorent.KZ 🤖 \nПостараюсь дать ответы на ваши вопросы.🧤")
-    await state.set_state(forms.QuestionForm.question_text)
-    await message.answer("✏️ Напишите ваш вопрос/проблему подробнее", reply_markup=keyboards.back_question_menu)
+@router.message(F.text == '🪩 Cоциальные сети')
+async def share_with_social_link(message: Message):
+    await message.answer("🇰🇿 Біздің әлеуметтік желілер"
+                         "\n🇷🇺 Наши социальные сети", reply_markup=keyboards.social_menu)
     
 
-@router.message(forms.QuestionForm.question_text)
-async def process_date_queston(message: Message, state: FSMContext) -> None:
-    while message.text != "🏁 Перейти в меню":
-        await state.update_data(question_text=message.text)
-        data = await state.get_data()
-        goal = data.get('question_text', '')
-        answer = await answer_using_gpt(goal)
-        await message.answer(f'{answer}', reply_markup=keyboards.back_question_menu)
-        break        
-    else:
-        await state.clear()
-        await message.answer("Вас приветствует компания Kinorent.KZ!", reply_markup=keyboards.main_menu)
+# TODO По жеалнию можно добавить GPT
+# @router.message(F.text == '🙋🏽 Задать вопрос')
+# async def ask_question(message: Message, state: FSMContext):
+#     await message.answer("Привет, я виртуальный консультант компании Kinorent.KZ 🤖 \nПостараюсь дать ответы на ваши вопросы.🧤")
+#     await state.set_state(forms.QuestionForm.question_text)
+#     await message.answer("✏️ Напишите ваш вопрос/проблему подробнее", reply_markup=keyboards.back_question_menu)
+    
+
+# @router.message(forms.QuestionForm.question_text)
+# async def process_date_queston(message: Message, state: FSMContext) -> None:
+#     while message.text != "🏁 Перейти в меню":
+#         await state.update_data(question_text=message.text)
+#         data = await state.get_data()
+#         goal = data.get('question_text', '')
+#         answer = await answer_using_gpt(goal)
+#         await message.answer(f'{answer}', reply_markup=keyboards.back_question_menu)
+#         break        
+#     else:
+#         await state.clear()
+#         await message.answer("Вас приветствует компания Kinorent.KZ!", reply_markup=keyboards.main_menu)
         
 
 
@@ -108,7 +92,7 @@ async def get_packages(callback: CallbackQuery):
     package_to_compare = callback.data[8:]
 
     photo_path = send_photo_with_caption_and_markup(config.settings['USER_PATH'], config.settings['PROJECT_PATH'],
-                                                    "jpeg",
+                                                    "jpg",
                                                     package_to_compare)
 
     await callback.message.answer_photo(photo=photo_path, caption=handle_data.package_data[f'{package_to_compare}'],
@@ -213,7 +197,7 @@ async def get_guide_photo(callback: CallbackQuery):
     guide_number = callback.data[6:]
     photo_path = send_photo_with_caption_and_markup(config.settings['USER_PATH'], config.settings['PROJECT_PATH'],
                                                     "png", guide_number)
-    await callback.message.answer_photo(photo=photo_path, reply_markup=keyboards.main_menu)
+    await callback.message.answer_photo(photo=photo_path, reply_markup=keyboards.back_instruction_menu)
 
 
 @router.message(F.contact)
@@ -232,7 +216,8 @@ async def send_phone_number(message: Message) -> None:
 
 
 
-
 @router.message()
 async def no_idea(message: Message):
-    await message.answer("Я вас не понимаю 🤷‍♂️")
+    if message.chat.id == -1001869386128:
+        return
+    await message.answer(f"Я вас не понимаю 🤷‍♂️",)
