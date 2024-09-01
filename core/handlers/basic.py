@@ -5,8 +5,8 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.types import ReplyKeyboardRemove, FSInputFile
 from typing import Any, Dict
 from functools import lru_cache
-
-
+from dotenv import load_dotenv
+load_dotenv()
 
 
 import core.keyboards.buttons as keyboards
@@ -218,6 +218,6 @@ async def send_phone_number(message: Message) -> None:
 
 @router.message()
 async def no_idea(message: Message):
-    if message.chat.id == -1001869386128:
+    if message.chat.id == os.getenv('TELEGRAM_GROUP_ID'):
         return
     await message.answer(f"Я вас не понимаю 🤷‍♂️",)
